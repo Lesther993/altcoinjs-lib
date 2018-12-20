@@ -33,8 +33,8 @@ function p2pkh (a, opts) {
 
   const _address = lazy.value(function () {
     const payload = bs58check.decode(a.address)
-    const version = payload.readUInt8(0)
-    const hash = payload.slice(1)
+    const version = payload.readUInt16BE(0)
+    const hash = payload.slice(2)
     return { version, hash }
   })
   const _chunks = lazy.value(function () { return bscript.decompile(a.input) })
@@ -45,9 +45,9 @@ function p2pkh (a, opts) {
   lazy.prop(o, 'address', function () {
     if (!o.hash) return
 
-    const payload = Buffer.allocUnsafe(21)
-    payload.writeUInt8(network.pubKeyHash, 0)
-    o.hash.copy(payload, 1)
+    const payload = Buffer.allocUnsafe(22)
+    payload.writeUInt16BE(network.pubKeyHash, 0)
+    o.hash.copy(payload, 2)
     return bs58check.encode(payload)
   })
   lazy.prop(o, 'hash', function () {
