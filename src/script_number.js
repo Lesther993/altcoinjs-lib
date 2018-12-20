@@ -48,7 +48,7 @@ function encode (number) {
   const negative = number < 0
 
   for (var i = 0; i < size; ++i) {
-    buffer.writeUInt8(value & 0xff, i)
+    buffer.writeUInt16BE(value & 0xff, i)
     value >>= 8
   }
 
